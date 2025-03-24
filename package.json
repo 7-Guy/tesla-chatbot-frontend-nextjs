@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cypress:open": "cypress open",
+    "e2e": "start-server-and-test dev http://localhost:3000 \"cypress open --e2e\"",
+    "e2e:headless": "start-server-and-test dev http://localhost:3000 \"cypress run --e2e\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -21,8 +24,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^14.2.0",
     "eslint": "^9",
     "eslint-config-next": "15.2.3",
+    "start-server-and-test": "^2.0.11",
     "typescript": "^5"
   }
 }
