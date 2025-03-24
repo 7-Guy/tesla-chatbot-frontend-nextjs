@@ -1,5 +1,13 @@
-.main-navigation {
-    width: 100%;
+.rootLayout {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.mainContent {
+    flex-grow: 1;
+}
+
+.footerContent {
+    text-align: center;
 }
