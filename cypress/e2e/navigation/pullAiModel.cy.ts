@@ -45,7 +45,9 @@ describe('Pull new ai model', () => {
         cy.get('.MuiStack-root > .MuiButtonBase-root').click();
         cy.get('#model_name').type('not existing model');
         cy.get('.MuiDialogContent-root > .MuiButtonBase-root').click();
-        cy.get('.MuiTypography-body1').should('have.text', 'deepseek-r1:8b');
+        /* ==== Generated with Cypress Studio ==== */
+        cy.get('.MuiListItemText-root > .MuiTypography-body1').should('have.text', 'deepseek-r1:8b');
+        /* ==== End Cypress Studio ==== */
     });
 
     it('pull existing ai model', () => {
@@ -103,6 +105,8 @@ describe('Pull new ai model', () => {
         cy.get('#model_name').type('not existing model');
         cy.get('.MuiDialogContent-root > .MuiButtonBase-root').click();
 
-        cy.get(':nth-child(1) > .MuiListItemText-root > .MuiTypography-body1').should('have.text', 'deepseek-llm:7b');
+        /* ==== Generated with Cypress Studio ==== */
+        cy.get(':nth-child(1) > .MuiFormControlLabel-root > .MuiFormControlLabel-label > .MuiListItemText-root > .MuiTypography-body1').should('have.text', 'deepseek-llm:7b');
+        /* ==== End Cypress Studio ==== */
     });
 });
