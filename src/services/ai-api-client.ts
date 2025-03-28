@@ -23,14 +23,12 @@ export async function pullNewModel(model: string): Promise<PullModelResponse> {
         }
         return {success: true, error: "", modelName: model}
 
-    } catch (error) {
-        console.error("Error:", error);
+    } catch {
         return {success: false, error: "Could not fetch model", modelName: model};
     }
 }
 
 export async function fetchExistingModels(): Promise<AiModel[]> {
-    console.log("base URL: ", {BASE_URL})
 
     interface ModelData {
         model: string;
