@@ -1,4 +1,4 @@
-describe('My First Test', () => {
+describe('Navigation Test', () => {
     it('clicking the tabs navigates to the respective URLs', () => {
         cy.visit('/')
 

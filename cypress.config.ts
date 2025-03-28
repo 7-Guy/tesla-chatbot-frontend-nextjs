@@ -7,5 +7,9 @@ export default defineConfig({
         setupNodeEvents() {
             // implement node event listeners here
         },
+        experimentalStudio: true,
     },
+    env: {
+        aiBackendUrl: 'http://localhost:11434'
+    }
 });
