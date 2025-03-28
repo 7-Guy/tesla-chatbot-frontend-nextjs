@@ -1,8 +1,8 @@
 import type {Metadata} from "next";
 import "./globals.css";
 import React from "react";
-import MainNavigation from "@/app/components/header/mainNavigation";
-import {Footer} from "@/app/components/footer/footer";
+import MainNavigation from "@/components/header/mainNavigation";
+import {Footer} from "@/components/footer/footer";
 import "./styles.modules.css"
 
 export const metadata: Metadata = {
