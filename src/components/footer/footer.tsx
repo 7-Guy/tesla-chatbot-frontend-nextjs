@@ -1,7 +1,7 @@
 export function Footer() {
     return (
         <div>
-            <p>Footer</p>
+            <p>Chatbot App</p>
         </div>
     )
 }

@@ -4,6 +4,7 @@ import React from "react";
 import MainNavigation from "@/components/header/mainNavigation";
 import {Footer} from "@/components/footer/footer";
 import "./styles.modules.css"
+import ModelsContextProvider from "@/store/models-context";
 
 export const metadata: Metadata = {
     title: "Nikola Tesla Chatbot",
@@ -19,9 +20,11 @@ export default function RootLayout({children}: Readonly<{
         <div className="mainNavigation">
             <MainNavigation/>
         </div>
-        <div className="mainContent">
-            {children}
-        </div>
+        <ModelsContextProvider>
+            <div className="mainContent">
+                {children}
+            </div>
+        </ModelsContextProvider>
         <div className="footerContent">
             <Footer/>
         </div>
