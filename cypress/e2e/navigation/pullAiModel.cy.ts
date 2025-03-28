@@ -1,9 +1,13 @@
-// Code from Real World App (RWA)
 describe('Pull new ai model', () => {
-    beforeEach(() => {
-        cy.visit('/ai-models')
+    const aiBackendUrl = Cypress.env('aiBackendUrl');
+    const interceptUpdateModelsUrl = `${aiBackendUrl}/api/tags`;
+    const interceptPullModelUrl = `${aiBackendUrl}/api/model`;
 
-        cy.intercept('GET', 'http://localhost:11434/api/tags', {
+
+    beforeEach(() => {
+        cy.visit('/ai-models');
+        cy.log(interceptUpdateModelsUrl);
+        cy.intercept('GET', interceptUpdateModelsUrl, {
             statusCode: 200,
             body: {
                 "models": [
@@ -26,33 +30,36 @@ describe('Pull new ai model', () => {
                     }
                 ]
             }
-        })
-    })
+        });
+    });
 
     it('pull not existing ai model', () => {
-        cy.intercept('POST', 'http://localhost:11434/api/pull', {
+        cy.log(interceptUpdateModelsUrl)
+        cy.intercept('POST', interceptPullModelUrl, {
             statusCode: 500,
             body: {
                 "error": "pull model manifest: file does not exist"
             }
-        }).as('pullModel')
+        }).as('pullModel');
 
         cy.get('.MuiStack-root > .MuiButtonBase-root').click();
         cy.get('#model_name').type('not existing model');
         cy.get('.MuiDialogContent-root > .MuiButtonBase-root').click();
         cy.get('.MuiTypography-body1').should('have.text', 'deepseek-r1:8b');
-    })
+    });
 
     it('pull existing ai model', () => {
-        cy.intercept('POST', 'http://localhost:11434/api/pull', {
+        cy.log(interceptUpdateModelsUrl);
+        cy.intercept('POST', interceptPullModelUrl, {
             statusCode: 200,
             body: {
                 "success": true,
                 "modelName": "deepseek-llm:7b"
             }
-        }).as('pullModel')
+        }).as('pullModel');
 
-        cy.intercept('GET', 'http://localhost:11434/api/tags', {
+        cy.log(interceptUpdateModelsUrl);
+        cy.intercept('GET', interceptUpdateModelsUrl, {
             statusCode: 200,
             body: {
                 "models": [
@@ -90,12 +97,12 @@ describe('Pull new ai model', () => {
                     }
                 ]
             }
-        }).as('updateModelList')
+        }).as('updateModelList');
 
         cy.get('.MuiStack-root > .MuiButtonBase-root').click();
         cy.get('#model_name').type('not existing model');
         cy.get('.MuiDialogContent-root > .MuiButtonBase-root').click();
 
         cy.get(':nth-child(1) > .MuiListItemText-root > .MuiTypography-body1').should('have.text', 'deepseek-llm:7b');
-    })
-})
+    });
+});

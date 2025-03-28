@@ -1,6 +1,6 @@
 name: Cypress Tests
 
-on: 
+on:
   push:
   workflow_dispatch:
 
@@ -21,3 +21,4 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_PUBLIC_AI_BACKEND_URL: 'http://localhost:11434/'

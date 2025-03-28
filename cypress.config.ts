@@ -9,4 +9,7 @@ export default defineConfig({
         },
         experimentalStudio: true,
     },
+    env: {
+        aiBackendUrl: 'http://localhost:11434/'
+    }
 });
