@@ -1,3 +1,7 @@
-export default function HistoryPage(){
-    return <h1>History Page</h1>
+import ChatHistoryViewer from "@/components/Features/history/ChatHistoryViewer";
+
+export default function HistoryPage() {
+    return (
+        <ChatHistoryViewer/>
+    )
 }

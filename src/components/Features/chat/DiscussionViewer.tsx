@@ -5,11 +5,9 @@ import styles from './styles.module.css'
 import {Button, Skeleton, Stack, TextField} from "@mui/material";
 import React, {use, useState} from "react";
 import {DiscussionContext} from "@/store/discussion-context";
-import {ModelsContext} from "@/store/models-context";
 
 export default function DiscussionViewer() {
     const {discussion, finishDiscussion, askQuestion} = use(DiscussionContext);
-    const {selectedModel} = use(ModelsContext);
 
     function handleQuestionChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
         setNextQuestion(event.target.value);
@@ -18,11 +16,7 @@ export default function DiscussionViewer() {
     const [nextQuestion, setNextQuestion] = useState("");
     const handleSubmit = () => {
         console.log("next Question: " + nextQuestion);
-        if (!selectedModel) {
-            alert("cannot ask a question without a model selected");
-            return;
-        }
-        askQuestion(nextQuestion, selectedModel);
+        askQuestion(nextQuestion);
         setNextQuestion("");
     };
 

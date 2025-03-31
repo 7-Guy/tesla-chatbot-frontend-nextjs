@@ -10,6 +10,10 @@ import {usePathname} from "next/navigation";
 export default function MainNavigation() {
     const pathname = usePathname();
     const [value, setValue] = React.useState(pathname);
+    
+    React.useEffect(() => {
+        setValue(pathname);
+    }, [pathname]);
 
     const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);

@@ -1,10 +1,9 @@
 import React, {createContext, useEffect, useState} from "react";
-import {Discussion, newDiscussion} from "@/entities/Discussion";
 import {DiscussionContextType} from "@/store/contextTypes";
-import {Exhibit} from "@/entities/Exhibit";
 import {Question} from "@/entities/Question";
-import {fetchNextResponse, fetchResponse} from "@/services/ai-api-client";
+import {fetchNextResponse, fetchResponse, findTopic} from "@/services/ai-api-client";
 import {AiModel} from "@/entities/AiModel";
+import {Discussion, DiscussionHistoryElement, newDiscussion} from "@/entities/Discussions";
 
 export const DiscussionContext = createContext<DiscussionContextType>({
     discussion: null,
@@ -15,6 +14,8 @@ export const DiscussionContext = createContext<DiscussionContextType>({
     finishDiscussion: () => {
     },
     askQuestion: () => {
+    },
+    reactivateDiscussion: () => {
     }
 });
 
@@ -26,16 +27,16 @@ export default function DiscussionContextProvider({children}: { children: React.
     };
 
     const [discussion, setDiscussion] = useState<Discussion | null>(null);
-    const [discussionHistory, setDiscussionHistory] = useState<Discussion[]>([]);
+    const [discussionHistory, setDiscussionHistory] = useState<DiscussionHistoryElement[]>([]);
     const [questionRequest, setQuestionRequest] = useState<questionRequestType | null>(null);
 
-    function handleActivateDiscussion(exhibit: Exhibit) {
-        const discussion = newDiscussion(exhibit);
+    function handleActivateDiscussion(model: AiModel) {
+        const discussion = newDiscussion(model);
         setDiscussion(discussion);
         return discussion;
     }
 
-    function handleAskQuestion(question: string, model: AiModel) {
+    function handleAskQuestion(question: string) {
         if (discussion) {
             const isInitialQuestion = discussion.questions.length === 0;
             const newQuestion: Question = {text: question};
@@ -45,7 +46,7 @@ export default function DiscussionContextProvider({children}: { children: React.
             });
             setQuestionRequest({
                 question: newQuestion,
-                model: model,
+                model: discussion.aiModel,
                 isInitialQuestion,
                 previousQuestions: discussion.questions,
                 previousAnswers: discussion.answers
@@ -55,8 +56,19 @@ export default function DiscussionContextProvider({children}: { children: React.
 
     function handleFinishDiscussion() {
         if (discussion) {
-            setDiscussionHistory((prevHistory) => [...prevHistory, discussion]);
-            setDiscussion(null);
+            findTopic(discussion)
+                .then(topic => {
+                    const discussionHistoryElement: DiscussionHistoryElement = {
+                        discussion: discussion,
+                        discussionMetadata: {
+                            numberOfQuestions: discussion.questions.length,
+                            numberOfAnswers: discussion.answers.length,
+                            topic: topic
+                        }
+                    };
+                    setDiscussionHistory((prevHistory) => [...prevHistory, discussionHistoryElement]);
+                    setDiscussion(null);
+                })
         }
     }
 
@@ -81,12 +93,22 @@ export default function DiscussionContextProvider({children}: { children: React.
         }
     }, [discussion, questionRequest]);
 
+    function handleReactivateDiscussion(discussion: Discussion) {
+        if (questionRequest) {
+            alert("Cannot reactivate discussion if there is a question waiting for a response");
+            return;
+        }
+        setDiscussion(discussion);
+    }
+
+
     const discussionContext: DiscussionContextType = {
         discussion: discussion,
         discussionHistory: discussionHistory,
         activateDiscussion: handleActivateDiscussion,
         finishDiscussion: handleFinishDiscussion,
         askQuestion: handleAskQuestion,
+        reactivateDiscussion: handleReactivateDiscussion
     }
 
     return (

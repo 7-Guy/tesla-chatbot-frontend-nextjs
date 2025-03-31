@@ -4,31 +4,54 @@ import DiscussionViewer from "@/components/Features/chat/DiscussionViewer";
 import {DiscussionContext} from "@/store/discussion-context";
 import {use} from "react";
 import {Button} from "@mui/material";
+import {ModelsContext} from "@/store/models-context";
+import Link from "next/link";
+import {useTheme} from "@mui/material/styles";
 
 export default function ChatViewer() {
     const {discussion, activateDiscussion} = use(DiscussionContext);
+    const {selectedModel} = use(ModelsContext);
+    const theme = useTheme();
 
     function handleActivateDiscussion() {
-        const exhibit = {
-            name: "Geography",
-            description: "Geography is the study of places and the relationships between people and their environments.",
-            imageUrl: 'https://www.google.com/imgres?q=geography&imgurl=https%3A%2F%2Ffarm5.static.flickr.com%2F4102%2F4925267732_8b4a2cf887.jpg&imgrefurl=https%3A%2F%2Flibguides.humboldt.edu%2Fopenedu%2Fgeog&docid=VsuocsUyHw0lhM&tbnid=ZhBOzriB7OB9vM&vet=12ahUKEwisjZK_9qyMAxX0ReUKHbK2CnMQM3oECGIQAA..i&w=500&h=320&hcb=2&ved=2ahUKEwisjZK_9qyMAxX0ReUKHbK2CnMQM3oECGIQAA'
+        if (!selectedModel) {
+            alert("cannot activate a discussion without a model selected");
+            return;
         }
-        activateDiscussion(exhibit);
+        activateDiscussion(selectedModel);
+    }
+
+    function ActivateDiscussionButton() {
+        return (
+            selectedModel
+                ? (
+                    <Button id="activate-discussion-button"
+                            variant="outlined"
+                            onClick={handleActivateDiscussion}>
+                        Activate Discussion
+                    </Button>
+                )
+                : (
+                    <>
+                        <p color={`${theme.palette.error}`}>Select an AI Model first before starting a discussion</p>
+                        <Button id="select-model-button"
+                                variant="outlined"
+                                component={Link}
+                                href="/ai-models">
+                            Select AI Model
+                        </Button>
+                    </>
+
+                ))
     }
 
     return (
         <>
             {discussion
-                ? (
-                    <DiscussionViewer></DiscussionViewer>
-                )
-                : (
-                    <Button variant="outlined"
-                            onClick={handleActivateDiscussion}>
-                        Activate Discussion
-                    </Button>
-                )}
+                ? <DiscussionViewer></DiscussionViewer>
+                : <ActivateDiscussionButton/>
+
+            }
         </>
 
     )

@@ -1,6 +1,5 @@
 import {AiModel} from "@/entities/AiModel";
-import {Discussion} from "@/entities/Discussion";
-import {Exhibit} from "@/entities/Exhibit";
+import {Discussion, DiscussionHistoryElement} from "@/entities/Discussions";
 
 export type ModelsContextType = {
     models: AiModel[],
@@ -11,8 +10,9 @@ export type ModelsContextType = {
 
 export type DiscussionContextType = {
     discussion: Discussion | null,
-    discussionHistory: Discussion[],
-    activateDiscussion: (exhibit: Exhibit) => Discussion,
+    discussionHistory: DiscussionHistoryElement[],
+    activateDiscussion: (model: AiModel) => Discussion,
     finishDiscussion: () => void,
-    askQuestion: (question: string, model: AiModel) => void,
+    askQuestion: (question: string) => void,
+    reactivateDiscussion: (discussion: Discussion) => void,
 }

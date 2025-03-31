@@ -1,6 +1,7 @@
 import {AiModel, PullModelResponse} from "@/entities/AiModel";
 import {Question} from "@/entities/Question";
 import {Answer} from "@/entities/Answer";
+import {Discussion} from "@/entities/Discussions";
 
 const BASE_URL = process.env.NEXT_PUBLIC_AI_BACKEND_URL;
 
@@ -131,6 +132,36 @@ export async function fetchNextResponse(
         });
         const data = await response.json();
         return data.message.content;
+    } catch (error) {
+        console.error("Error:", error);
+        throw error;
+    }
+}
+
+export async function findTopic(discussion: Discussion): Promise<string> {
+    const prompt: string = "What is the topic of the following question?"
+        + "Summarize the question in one or two words."
+        + "You're answer should only consist of the topic and nothing else."
+        + "Question: "
+        + discussion.questions[0].text
+
+
+    const requestBody = {
+        model: discussion.aiModel.name,
+        prompt: prompt,
+        stream: false
+    };
+
+    try {
+        const response = await fetch(`${BASE_URL}/api/generate`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestBody)
+        });
+        const data = await response.json();
+        return data.response;
     } catch (error) {
         console.error("Error:", error);
         throw error;
