@@ -1,0 +1,15 @@
+.discussion {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.textInput {
+    padding: 0.5rem;
+}
+
+
+
+

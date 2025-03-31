@@ -3,13 +3,8 @@
 import React, {createContext, useEffect, useState} from "react";
 import {AiModel} from "@/entities/AiModel";
 import {fetchExistingModels, pullNewModel} from "@/services/ai-api-client";
-
-type ModelsContextType = {
-    models: AiModel[],
-    selectedModel: AiModel | null,
-    setSelectedModel: (model: AiModel) => void,
-    pullNewModel: (modelName: string) => Promise<{ message: string }>,
-}
+import {ModelsContextType} from "@/store/contextTypes";
+import {isInvalidText} from "@/store/validations";
 
 export const ModelsContext = createContext<ModelsContextType>({
     models: [],
@@ -32,10 +27,6 @@ export default function ModelsContextProvider({children}: { children: React.Reac
 
     function handleSetSelectedModel(model: AiModel) {
         setSelectedModel(model);
-    }
-
-    function isInvalidText(text: string) {
-        return !text || text.trim() === '';
     }
 
     async function handlePullNewModel(modelName: string) {

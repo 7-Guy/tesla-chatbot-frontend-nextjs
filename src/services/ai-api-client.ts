@@ -1,4 +1,6 @@
 import {AiModel, PullModelResponse} from "@/entities/AiModel";
+import {Question} from "@/entities/Question";
+import {Answer} from "@/entities/Answer";
 
 const BASE_URL = process.env.NEXT_PUBLIC_AI_BACKEND_URL;
 
@@ -55,4 +57,82 @@ export async function fetchExistingModels(): Promise<AiModel[]> {
             console.log('Could not fetch models from Ollama: ', error)
             return [] as AiModel[];
         });
+}
+
+export async function fetchResponse(question: Question, model: AiModel): Promise<string> {
+    const prompt: string = "Act as if you were Nikola Tesla."
+        + question.text + "?"
+        + "Talk as Nikola Tesla."
+
+    const requestBody = {
+        model: model.name,
+        prompt: prompt,
+        stream: false
+    };
+
+    try {
+        const response = await fetch(`${BASE_URL}/api/generate`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestBody)
+        });
+        const data = await response.json();
+        return data.response;
+    } catch (error) {
+        console.error("Error:", error);
+        throw error;
+    }
+}
+
+interface Message {
+    role: string;
+    content: string;
+}
+
+function getChatHistoryForRequest(questions: Question[], answers: Answer[]) {
+    const messages: Message[] = [];
+    questions.forEach((question, index) => {
+        messages.push({role: "user", content: question.text});
+        if (answers[index]) {
+            messages.push({role: "assistant", content: answers[index].text});
+        }
+    });
+    return messages;
+}
+
+function addNextQuestionToMessages(messages: Message[], nextQuestion: Question) {
+    messages.push({role: "user", content: nextQuestion.text});
+}
+
+export async function fetchNextResponse(
+    previousQuestions: Question[],
+    previousAnswers: Answer[],
+    nextQuestion: Question,
+    model: string): Promise<string> {
+
+    const messages: Message[] = getChatHistoryForRequest(previousQuestions, previousAnswers);
+    addNextQuestionToMessages(messages, nextQuestion);
+
+    const requestBody = {
+        model: model,
+        messages: messages,
+        stream: false
+    };
+
+    try {
+        const response = await fetch(`${BASE_URL}/api/chat`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestBody)
+        });
+        const data = await response.json();
+        return data.message.content;
+    } catch (error) {
+        console.error("Error:", error);
+        throw error;
+    }
 }

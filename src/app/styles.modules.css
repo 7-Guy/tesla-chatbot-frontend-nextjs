@@ -5,6 +5,8 @@
 }
 
 .mainContent {
+    max-width: 800px;
+    width: 100%;
     flex-grow: 1;
 }
 

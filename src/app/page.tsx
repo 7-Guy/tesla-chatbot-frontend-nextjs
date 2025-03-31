@@ -1,3 +1,10 @@
-export default function ChatPage(){
-    return <h1>Chat</h1>
+'use client'
+
+import ChatViewer from "@/components/Features/chat/ChatViewer";
+
+export default function ChatPage() {
+    return (
+        <>
+            <ChatViewer/>
+        </>);
 }
