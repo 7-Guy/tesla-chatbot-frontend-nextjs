@@ -31,9 +31,10 @@ export default function DiscussionViewer() {
                     <>
                         {discussion.questions.length > 0 && discussion.questions.map((question, i) => (
                             <div key={i} className={styles.discussion}>
-                                <InteractionCard text={question.text} isQuestion={true}/>
+                                <InteractionCard id={`${i}-question-card`} text={question.text} isQuestion={true}/>
                                 {discussion.answers[i] ? (
-                                    <InteractionCard text={discussion.answers[i].text} isQuestion={false}/>
+                                    <InteractionCard id={`${i}-answer-card`} text={discussion.answers[i].text}
+                                                     isQuestion={false}/>
                                 ) : (
                                     <Skeleton variant="rectangular" width={'80%'} height={30}/>
                                 )}
@@ -49,10 +50,12 @@ export default function DiscussionViewer() {
                            value={nextQuestion}
                 />
                 <Stack direction="row" spacing={2} sx={{justifyContent: 'space-between'}}>
-                    <Button variant="outlined" color="error" onClick={handleFinishDiscussion}>
+                    <Button id="finish-discussion-button" variant="outlined" color="error"
+                            onClick={handleFinishDiscussion}>
                         Finish discussion
                     </Button>
-                    <Button onClick={handleSubmit}
+                    <Button id="add-question-button"
+                            onClick={handleSubmit}
                             variant="outlined">
                         Add question
                     </Button>

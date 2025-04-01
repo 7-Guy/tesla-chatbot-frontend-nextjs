@@ -7,6 +7,7 @@ import {Button} from "@mui/material";
 import {ModelsContext} from "@/store/models-context";
 import Link from "next/link";
 import {useTheme} from "@mui/material/styles";
+import styles from './styles.module.css';
 
 export default function ChatViewer() {
     const {discussion, activateDiscussion} = use(DiscussionContext);
@@ -22,37 +23,40 @@ export default function ChatViewer() {
     }
 
     function ActivateDiscussionButton() {
-        return (
-            selectedModel
+        return (selectedModel
                 ? (
-                    <Button id="activate-discussion-button"
-                            variant="outlined"
-                            onClick={handleActivateDiscussion}>
-                        Activate Discussion
-                    </Button>
+                    <div className={styles.chatContainer}>
+                        <Button id="activate-discussion-button"
+                                variant="outlined"
+                                onClick={handleActivateDiscussion}>
+                            Activate Discussion
+                        </Button>
+                    </div>
                 )
                 : (
-                    <>
-                        <p color={`${theme.palette.error}`}>Select an AI Model first before starting a discussion</p>
+                    <div className={styles.chatContainer}>
+                        <p id="select-model-error-text"
+                           color={`${theme.palette.error}`}>Select an AI Model first before starting a
+                            discussion</p>
                         <Button id="select-model-button"
                                 variant="outlined"
                                 component={Link}
                                 href="/ai-models">
                             Select AI Model
                         </Button>
-                    </>
-
-                ))
+                    </div>
+                )
+        )
     }
 
     return (
-        <>
+        <div>
             {discussion
                 ? <DiscussionViewer></DiscussionViewer>
                 : <ActivateDiscussionButton/>
 
             }
-        </>
+        </div>
 
     )
 }

@@ -13,7 +13,8 @@ export type DiscussionMetadata = {
     topic: string;
 }
 
-export interface Discussion {
+export type Discussion = {
+    id: string;
     questions: Question[];
     answers: Answer[];
     aiModel: AiModel;
@@ -21,6 +22,7 @@ export interface Discussion {
 
 export function newDiscussion(aiModel: AiModel): Discussion {
     return {
+        id: crypto.randomUUID(),
         questions: [],
         answers: [],
         aiModel: aiModel

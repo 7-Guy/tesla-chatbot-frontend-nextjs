@@ -1,11 +1,11 @@
 import {Card} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
 
-export const InteractionCard = ({text, isQuestion}: { text: string; isQuestion: boolean }) => {
+export const InteractionCard = ({text, isQuestion, id}: { text: string; isQuestion: boolean, id: string }) => {
     const theme = useTheme();
 
     return (
-        <Card sx={{
+        <Card id={id} sx={{
             minWidth: "75%",
             maxWidth: '90%',
             marginLeft: isQuestion ? 'auto' : '0',

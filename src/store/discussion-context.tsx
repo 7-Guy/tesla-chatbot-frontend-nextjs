@@ -55,7 +55,7 @@ export default function DiscussionContextProvider({children}: { children: React.
     }
 
     function handleFinishDiscussion() {
-        if (discussion) {
+        if (discussion && discussion.questions && discussion.questions.length > 0) {
             findTopic(discussion)
                 .then(topic => {
                     const discussionHistoryElement: DiscussionHistoryElement = {
@@ -66,10 +66,14 @@ export default function DiscussionContextProvider({children}: { children: React.
                             topic: topic
                         }
                     };
-                    setDiscussionHistory((prevHistory) => [...prevHistory, discussionHistoryElement]);
+                    setDiscussionHistory((prevHistory) => {
+                        const filteredHistory = prevHistory.filter(element => element.discussion.id !== discussion.id);
+                        return [...filteredHistory, discussionHistoryElement];
+                    });
                     setDiscussion(null);
                 })
         }
+        setDiscussion(null);
     }
 
     useEffect(() => {
