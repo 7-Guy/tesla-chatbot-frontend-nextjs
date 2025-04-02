@@ -11,6 +11,10 @@ export default function MainNavigation() {
     const pathname = usePathname();
     const [value, setValue] = React.useState(pathname);
 
+    React.useEffect(() => {
+        setValue(pathname);
+    }, [pathname]);
+
     const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
@@ -29,12 +33,12 @@ export default function MainNavigation() {
                 aria-label="nav tabs example"
                 role="navigation"
             >
-                <Tab label="Chat" component={Link} href="/" value="/"/>
-                <Tab label="History" component={Link} href="/history" value="/history"/>
-                <Tab label="AI Models" component={Link} href="/ai-models" value="/ai-models"/>
-                <Tab label="Prompt Management" component={Link} href="/prompt-management"
+                <Tab id="tab-chat" label="Chat" component={Link} href="/" value="/"/>
+                <Tab id="tab-history" label="History" component={Link} href="/history" value="/history"/>
+                <Tab id="tab-ai-models" label="AI Models" component={Link} href="/ai-models" value="/ai-models"/>
+                <Tab id="tab-prompt-management" label="Prompt Management" component={Link} href="/prompt-management"
                      value="/prompt-management"/>
-                <Tab label="Exhibit Management" component={Link} href="/exhibit-management"
+                <Tab id="tab-exhibit-management" label="Exhibit Management" component={Link} href="/exhibit-management"
                      value="/exhibit-management"/>
             </Tabs>
         </Box>
