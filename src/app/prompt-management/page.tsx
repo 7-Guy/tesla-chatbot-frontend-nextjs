@@ -1,3 +1,5 @@
-export default function PromptManagementPage(){
-    return <h1>Prompt Management page</h1>
+import PromptManager from "@/components/Features/prompt-management/PromptManager";
+
+export default function PromptManagementPage() {
+    return <PromptManager/>
 }
