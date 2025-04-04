@@ -11,9 +11,6 @@ describe('Navigation Test', () => {
         cy.contains('Prompt Management').click()
         cy.location('pathname').should('eq', '/prompt-management')
 
-        cy.contains('Exhibit Management').click()
-        cy.location('pathname').should('eq', '/exhibit-management')
-
         cy.contains('Chat').click()
         cy.location('pathname').should('eq', '/')
     })

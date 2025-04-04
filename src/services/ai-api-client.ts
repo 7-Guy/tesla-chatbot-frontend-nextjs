@@ -36,14 +36,16 @@ export async function fetchExistingModels(): Promise<AiModel[]> {
     interface ModelData {
         model: string;
         size: number;
-        parameter_size: string;
+        details: {
+            parameter_size: string;
+        };
     }
 
     function ModelDataToAiModel(modelData: ModelData): AiModel {
         return {
             name: modelData.model,
             size: modelData.size,
-            parameter_size: modelData.parameter_size
+            parameter_size: modelData.details.parameter_size
         };
     }
 
@@ -60,11 +62,7 @@ export async function fetchExistingModels(): Promise<AiModel[]> {
         });
 }
 
-export async function fetchResponse(question: Question, model: AiModel): Promise<string> {
-    const prompt: string = "Act as if you were Nikola Tesla."
-        + question.text + "?"
-        + "Talk as Nikola Tesla."
-
+export async function fetchResponse(question: Question, model: AiModel, prompt: string): Promise<string> {
     const requestBody = {
         model: model.name,
         prompt: prompt,
@@ -139,12 +137,10 @@ export async function fetchNextResponse(
 }
 
 export async function findTopic(discussion: Discussion): Promise<string> {
-    const prompt: string = "What is the topic of the following question?"
+    const prompt: string = "What is the topic of the following question:"
+        + discussion.questions[0].text
         + "Summarize the question in one or two words."
         + "You're answer should only consist of the topic and nothing else."
-        + "Question: "
-        + discussion.questions[0].text
-
 
     const requestBody = {
         model: discussion.aiModel.name,
