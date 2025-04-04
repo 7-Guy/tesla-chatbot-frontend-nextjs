@@ -7,6 +7,7 @@ import ModelsContextProvider from "@/store/models-context";
 import {Footer} from "@/components/footer/footer";
 import React, {ReactNode} from "react";
 import DiscussionContextProvider from "@/store/discussion-context";
+import PromptsContextProvider from "@/store/prompts-context";
 
 export function ThemedContent({children}: { children: ReactNode }) {
     return (
@@ -15,11 +16,13 @@ export function ThemedContent({children}: { children: ReactNode }) {
                 <MainNavigation/>
             </div>
             <ModelsContextProvider>
-                <DiscussionContextProvider>
-                    <div className="mainContent">
-                        {children}
-                    </div>
-                </DiscussionContextProvider>
+                <PromptsContextProvider>
+                    <DiscussionContextProvider>
+                        <div className="mainContent">
+                            {children}
+                        </div>
+                    </DiscussionContextProvider>
+                </PromptsContextProvider>
             </ModelsContextProvider>
             <div className="footerContent">
                 <Footer/>

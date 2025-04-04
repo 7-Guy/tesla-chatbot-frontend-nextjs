@@ -1,9 +1,11 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, {createContext, use, useEffect, useState} from "react";
 import {DiscussionContextType} from "@/store/contextTypes";
 import {Question} from "@/entities/Question";
 import {fetchNextResponse, fetchResponse, findTopic} from "@/services/ai-api-client";
 import {AiModel} from "@/entities/AiModel";
 import {Discussion, DiscussionHistoryElement, newDiscussion} from "@/entities/Discussions";
+import {PromptsContext} from "@/store/prompts-context";
+import {getCompletePrompt} from "@/services/promptHelper";
 
 export const DiscussionContext = createContext<DiscussionContextType>({
     discussion: null,
@@ -29,6 +31,7 @@ export default function DiscussionContextProvider({children}: { children: React.
     const [discussion, setDiscussion] = useState<Discussion | null>(null);
     const [discussionHistory, setDiscussionHistory] = useState<DiscussionHistoryElement[]>([]);
     const [questionRequest, setQuestionRequest] = useState<questionRequestType | null>(null);
+    const {promptBuildingBlocks} = use(PromptsContext);
 
     function handleActivateDiscussion(model: AiModel) {
         const discussion = newDiscussion(model);
@@ -79,7 +82,8 @@ export default function DiscussionContextProvider({children}: { children: React.
     useEffect(() => {
         function getResponse(questionRequest: questionRequestType) {
             if (questionRequest.isInitialQuestion) {
-                return fetchResponse(questionRequest.question, questionRequest.model);
+                const prompt = getCompletePrompt(promptBuildingBlocks, questionRequest.question.text, "Nikola Tesla")
+                return fetchResponse(questionRequest.question, questionRequest.model, prompt);
             }
             return fetchNextResponse(questionRequest.previousQuestions, questionRequest.previousAnswers, questionRequest.question, questionRequest.model.name);
         }

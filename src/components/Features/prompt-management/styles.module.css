@@ -1,0 +1,26 @@
+.promptManagement {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.buildingBlock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.buildingBlockContainer {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+}
+
+
