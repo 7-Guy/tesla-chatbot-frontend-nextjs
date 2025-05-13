@@ -36,14 +36,16 @@ export async function fetchExistingModels(): Promise<AiModel[]> {
     interface ModelData {
         model: string;
         size: number;
-        parameter_size: string;
+        details: {
+            parameter_size: string;
+        };
     }
 
     function ModelDataToAiModel(modelData: ModelData): AiModel {
         return {
             name: modelData.model,
             size: modelData.size,
-            parameter_size: modelData.parameter_size
+            parameter_size: modelData.details.parameter_size
         };
     }
 
